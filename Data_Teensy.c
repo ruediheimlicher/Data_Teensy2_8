@@ -34,7 +34,6 @@
 
 #include "ds18x20.c"
 
-#include "transfer.c"
 
 
 #include "chan_n/mmc_avr_spi.c"
