@@ -337,7 +337,7 @@ DSTATUS mmc_disk_initialize (void)
    //lcd_putc('1');
    /* Turn off the socket power to reset the card */
 	for (Timer1 = 10; Timer1; ) ;		/* Wait for 100ms */
-	lcd_putc('2');
+	//lcd_putc('2');
    if (Stat & STA_NODISK) return Stat;	/* No card in the socket? */
 	power_on();							/* Turn on the socket power */
 	FCLK_SLOW;
