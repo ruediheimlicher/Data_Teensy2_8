@@ -517,8 +517,8 @@ void SPI_PORT_Init(void) // SPI-Pins aktivieren
 void SPI_ADC_init(void) // SS-Pin fuer EE aktivieren
 {
    
-   SPI_DDR |= (1<<SPI_SS);
-   SPI_PORT |= (1<<SPI_SS); // HI
+   SPI_ADC_CE_DDR |= (1<<SPI_ADC_CE);
+   SPI_ADC_CE_PORT |= (1<<SPI_ADC_CE); // HI
 }
 
 void SPI_Master_init (void)
@@ -1018,11 +1018,11 @@ int main (void)
    CPU_PRESCALE(CPU_8MHz); // Strom sparen
    
    timer0();
-   //   sei();
+      sei();
    Master_Init();
    SPI_PORT_Init();
    SPI_Master_init();
-   
+   SPI_ADC_init();
    
    volatile    uint8_t outcounter=0;
    volatile    uint8_t testdata =0x00;
@@ -1459,7 +1459,8 @@ int main (void)
          cli();
          //uint16_t tempdata =MCP3208_spiRead(SingleEnd,1);
          uint16_t tempdata = MCP3204_spiRead(1);
-
+         lcd_gotoxy(0,2);
+         lcd_putint12(tempdata);
          
          sei();
          //lcd_clr_line(2);

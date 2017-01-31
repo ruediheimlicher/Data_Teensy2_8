@@ -17,8 +17,8 @@ void MCP3208_spiDelay(unsigned int NOPcount)
 void spiADC_init()
 {
    SPCR=0;
-   SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR1)|(0<<SPR0);
-   SPCR |=(1<<CPOL)|(1<<CPHA);
+   SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);//|(0<<SPR1);
+   //SPCR |=(1<<CPOL)|(1<<CPHA);
    
 }
 
