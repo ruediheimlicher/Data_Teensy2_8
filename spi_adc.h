@@ -51,13 +51,12 @@
 
 #define delayCount   ((F_CPU)/1000000UL)
 
-volatile unsigned char gReciveHighByte, gReciveLowByte; // global Variables
 
-void spiadc_init(void);
+void spiADC_init(void);
 
 void MCP3208_spiDelay(unsigned int NOPcount);
 void MCP3208_spiInit(void);
 unsigned char MCP3208_spiWrite(char cData);
-unsigned int MCP3208_spiRead(unsigned char AD_type,unsigned char ADchanel);
-
+uint16_t MCP3208_spiRead(unsigned char AD_type,unsigned char ADchanel);
+uint16_t MCP3204_spiRead(uint8_t ch);
 #endif

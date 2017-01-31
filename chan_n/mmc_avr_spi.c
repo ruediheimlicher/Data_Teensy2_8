@@ -334,9 +334,10 @@ DSTATUS mmc_disk_initialize (void)
 	BYTE n, cmd, ty, ocr[4];
 
 	power_off();
+   //lcd_putc('1');
    /* Turn off the socket power to reset the card */
 	for (Timer1 = 10; Timer1; ) ;		/* Wait for 100ms */
-	
+	lcd_putc('2');
    if (Stat & STA_NODISK) return Stat;	/* No card in the socket? */
 	power_on();							/* Turn on the socket power */
 	FCLK_SLOW;
@@ -383,9 +384,9 @@ DSTATUS mmc_disk_initialize (void)
 
 	if (ty)
    {			/* Initialization succeded */
-      lcd_gotoxy(3,0);
-      lcd_puts("i OK");
-      lcd_puthex(CardType);
+      //lcd_gotoxy(3,0);
+      //lcd_puts("i OK");
+      //lcd_puthex(CardType);
 		Stat &= ~STA_NOINIT;		/* Clear STA_NOINIT */
 		FCLK_FAST;
 	} else {			/* Initialization failed */
@@ -654,15 +655,15 @@ DRESULT mmc_disk_ioctl (
 void mmc_disk_timerproc (void)
 {
 	BYTE n, s;
-
+//lcd_putc('5');
 	n = Timer1;				/* 100Hz decrement timer */
 	if (n) Timer1 = --n;
 	n = Timer2;
 	if (n) Timer2 = --n;
 
 	s = Stat;
-
-	if (MMC_WP)				/* Write protected */
+//lcd_putc('6');
+   if (MMC_WP)				/* Write protected */
 		s |= STA_PROTECT;
 	else					/* Write enabled */
 		s &= ~STA_PROTECT;

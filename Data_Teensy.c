@@ -707,7 +707,7 @@ void timer0 (void) // Grundtakt fuer Stoppuhren usw.
    
    //TCCR0B = 0b101;
    TIMSK0 |= (1<<OCIE0A);
-   
+   // lcd_putc('9');
    
 }
 
@@ -730,13 +730,16 @@ volatile uint16_t timer2BatterieCounter=0;
 #pragma mark TIMER0_COMPA
 ISR(TIMER0_COMPA_vect)
 {
+   //OSZIA_LO;
+   //lcd_putc('4');
    //lcd_putc('+');
-   //   Timer1--;			/* Performance counter for this module */
+   //   Timer1--;          /* Performance counter for this module */
    mmc_disk_timerproc();	/* Drive timer procedure of low level disk I/O module */
+   
    writecounter1++;
    if (writecounter1 >= WRITETAKT) // 1s
    {
-      OSZIA_LO;
+      
       intervallcounter++;
       if (intervallcounter >= intervall)
       {
@@ -766,7 +769,7 @@ ISR(TIMER0_COMPA_vect)
          writecounter2 = 0;
       }
    }
-   OSZIA_HI;
+   //OSZIA_HI;
 }
 
 
@@ -827,10 +830,10 @@ void timer1(void)
 #pragma mark INT0
 ISR(INT0_vect) // Interrupt bei CS, falling edge
 {
-   //   OSZI_A_LO;
+      //OSZIA_LO;
    inindex=0;
    //SPDR = 0;// Erstes Byte an Slave
-   //   OSZI_A_HI;
+      //OSZIA_HI;
    
    //  spi_txbuffer[0]++;
    //  spi_txbuffer[2]--;
@@ -1014,7 +1017,7 @@ int main (void)
    // set for 16 MHz clock
    CPU_PRESCALE(CPU_8MHz); // Strom sparen
    
-   
+   timer0();
    //   sei();
    Master_Init();
    SPI_PORT_Init();
@@ -1145,7 +1148,7 @@ int main (void)
    
    uint8_t anzeigecounter=0;
    
-   timer0();
+   
    timer1();
    sei();
    
@@ -1167,7 +1170,7 @@ int main (void)
    if (initerr)
    {
       lcd_gotoxy(0,0);
-      lcd_puts("CD err");
+      lcd_puts("SD err");
       lcd_puthex(initerr);
       lcd_putc('*');
       
@@ -1175,7 +1178,7 @@ int main (void)
    else
    {
       lcd_gotoxy(0,0);
-      lcd_puts("CD OK ");
+      lcd_puts("SD OK ");
       lcd_puthex(initerr);
       lcd_putc('*');
       
@@ -1346,7 +1349,7 @@ int main (void)
    
    */
    // MARK:  while
-
+   sei();
    while (1)
    {
       //OSZI_B_LO;
@@ -1452,7 +1455,13 @@ int main (void)
           */
          hoststatus &= ~(1<<MESSUNG_OK);
          // ADC
+         spiADC_init();
+         cli();
+         //uint16_t tempdata =MCP3208_spiRead(SingleEnd,1);
+         uint16_t tempdata = MCP3204_spiRead(1);
+
          
+         sei();
          //lcd_clr_line(2);
          
          lcd_gotoxy(0,2);
@@ -1602,7 +1611,7 @@ int main (void)
          //OSZIA_HI;
          
          uint8_t usberfolg = usb_rawhid_send((void*)sendbuffer, 50);
-         lcd_gotoxy(10,0);
+         lcd_gotoxy(12,0);
          //lcd_putint(adcwert & 0x00FF);
          //lcd_putc(' ');
          //lcd_putint2((adcwert & 0xFF00)>>8);
