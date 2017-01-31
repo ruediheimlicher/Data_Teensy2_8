@@ -1024,6 +1024,8 @@ int main (void)
    SPI_Master_init();
    SPI_ADC_init();
    
+   uint16_t    ADC_Array[ADC_BUFSIZE];
+   
    volatile    uint8_t outcounter=0;
    volatile    uint8_t testdata =0x00;
    //  volatile    uint8_t testaddress =0x00;
@@ -1458,9 +1460,20 @@ int main (void)
          spiADC_init();
          cli();
          //uint16_t tempdata =MCP3208_spiRead(SingleEnd,1);
-         uint16_t tempdata = MCP3204_spiRead(1);
+         uint8_t i=0;
+         //uint16_t tempdata=0;
+         for (i=0;i<4;i++)
+         {
+            //tempdata = MCP3204_spiRead(i);
+            ADC_Array[i] = MCP3204_spiRead(i);;
+         }
+         //uint16_t tempdata = MCP3204_spiRead(1);
          lcd_gotoxy(0,2);
-         lcd_putint12(tempdata);
+         for (i=0;i<4;i++)
+         {
+            lcd_putint12(ADC_Array[i]);
+            lcd_putc(' ');
+         }
          
          sei();
          //lcd_clr_line(2);

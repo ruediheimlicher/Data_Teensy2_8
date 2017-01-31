@@ -58,7 +58,7 @@
 #define SPI_ADC_CE_DDR      DDRC
 #define SPI_ADC_CE       PC6
 
-#define SPI_BUFSIZE              8
+#define ADC_BUFSIZE              4
 #define ADC_DELAY                   8
 
 #endif
